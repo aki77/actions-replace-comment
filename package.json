@@ -1,0 +1,32 @@
+{
+  "name": "@aki77/actions-replace-comment",
+  "version": "0.1.0",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "author": "aki77",
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc",
+    "prepublishOnly": "tsc",
+    "lint": "xo"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/aki77/actions-replace-comment.git"
+  },
+  "xo": {
+    "space": true
+  },
+  "devDependencies": {
+    "typescript": "^3.8.3",
+    "xo": "^0.30.0"
+  },
+  "dependencies": {
+    "@octokit/rest": "^17.8.0"
+  },
+  "files": [
+    "README.md",
+    "package.json",
+    "lib"
+  ]
+}
