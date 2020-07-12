@@ -12,10 +12,15 @@ type ReplaceCommentOptions = GeneralOptions & {
 };
 
 type DeleteCommentOptions = GeneralOptions & {
-  startsWith: string;
+  startsWith?: boolean;
+  body: string;
 };
 
 type CreateCommentOptions = GeneralOptions & {
+  body: string;
+};
+
+type ExistsCommentOptions = GeneralOptions & {
   body: string;
 };
 
@@ -23,16 +28,21 @@ const issues = (auth: string) => {
   return new Octokit({auth}).issues;
 };
 
-export const deleteComment = async ({token, owner, repo, issue_number, startsWith}: Readonly<DeleteCommentOptions>): Promise<void> => {
-  const findCommentId = async (): Promise<number | undefined> => {
-    const {data: existingComments} = await issues(token).listComments({owner, repo, issue_number});
-    const comment = existingComments.find(({body}: { readonly body: string }) => body.startsWith(startsWith));
-    return comment?.id;
-  };
+export const findComment = async ({token, owner, repo, issue_number, body}: ExistsCommentOptions) => {
+  const firstLine = body.split('\n', 1)[0];
+  const {data: existingComments} = await issues(token).listComments({owner, repo, issue_number});
+  const comment = existingComments.find((comment: { readonly body: string }) => comment.body.startsWith(firstLine));
 
-  const id = await findCommentId();
-  if (id) {
-    await issues(token).deleteComment({owner, repo, comment_id: id});
+  return {
+    comment_id: comment ? comment.id : undefined,
+    exactMatch: comment && comment.body === body
+  };
+};
+
+export const deleteComment = async ({token, owner, repo, issue_number, body, startsWith = false}: Readonly<DeleteCommentOptions>): Promise<void> => {
+  const {comment_id, exactMatch} = await findComment({token, owner, repo, issue_number, body});
+  if (comment_id && (!startsWith || exactMatch)) {
+    await issues(token).deleteComment({owner, repo, comment_id});
   }
 };
 
@@ -41,8 +51,11 @@ export const createComment = async ({token, owner, repo, issue_number, body}: Re
 };
 
 export default async function replaceComment({token, owner, repo, issue_number, body}: Readonly<ReplaceCommentOptions>) {
-  const firstLine = body.split('\n', 1)[0];
+  const {exactMatch} = await findComment({token, owner, repo, issue_number, body});
+  if (exactMatch) {
+    return;
+  }
 
-  await deleteComment({token, owner, repo, issue_number, startsWith: firstLine});
+  await deleteComment({token, owner, repo, issue_number, body, startsWith: true});
   return createComment({token, owner, repo, issue_number, body});
 }
