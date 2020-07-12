@@ -41,7 +41,7 @@ export const findComment = async ({token, owner, repo, issue_number, body}: Exis
 
 export const deleteComment = async ({token, owner, repo, issue_number, body, startsWith = false}: Readonly<DeleteCommentOptions>): Promise<void> => {
   const {comment_id, exactMatch} = await findComment({token, owner, repo, issue_number, body});
-  if (comment_id && (!startsWith || exactMatch)) {
+  if (comment_id && (startsWith || exactMatch)) {
     await issues(token).deleteComment({owner, repo, comment_id});
   }
 };
@@ -51,11 +51,14 @@ export const createComment = async ({token, owner, repo, issue_number, body}: Re
 };
 
 export default async function replaceComment({token, owner, repo, issue_number, body}: Readonly<ReplaceCommentOptions>) {
-  const {exactMatch} = await findComment({token, owner, repo, issue_number, body});
+  const {comment_id, exactMatch} = await findComment({token, owner, repo, issue_number, body});
   if (exactMatch) {
     return;
   }
 
-  await deleteComment({token, owner, repo, issue_number, body, startsWith: true});
+  if (comment_id) {
+    await issues(token).deleteComment({owner, repo, comment_id});
+  }
+
   return createComment({token, owner, repo, issue_number, body});
 }
