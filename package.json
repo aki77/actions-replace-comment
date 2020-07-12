@@ -1,6 +1,6 @@
 {
   "name": "@aki77/actions-replace-comment",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "author": "aki77",
@@ -18,11 +18,11 @@
     "space": true
   },
   "devDependencies": {
-    "typescript": "^3.8.3",
-    "xo": "^0.30.0"
+    "typescript": "^3.9.6",
+    "xo": "^0.32.1"
   },
   "dependencies": {
-    "@octokit/rest": "^17.8.0"
+    "@octokit/rest": "^18.0.0"
   },
   "files": [
     "README.md",
