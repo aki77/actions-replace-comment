@@ -1,4 +1,5 @@
 import {Octokit} from '@octokit/rest';
+import type {RestEndpointMethodTypes} from '@octokit/rest/dist-types';
 
 type GeneralOptions = {
   token: string;
@@ -46,11 +47,14 @@ export const deleteComment = async ({token, owner, repo, issue_number, body, sta
   }
 };
 
-export const createComment = async ({token, owner, repo, issue_number, body}: Readonly<CreateCommentOptions>) => {
-  return issues(token).createComment({owner, repo, issue_number, body});
+type CreateCommentResponse = Promise<RestEndpointMethodTypes['issues']['createComment']['response']['data']>;
+
+export const createComment = async ({token, owner, repo, issue_number, body}: Readonly<CreateCommentOptions>): Promise<CreateCommentResponse> => {
+  const responce = await issues(token).createComment({owner, repo, issue_number, body});
+  return responce.data;
 };
 
-export default async function replaceComment({token, owner, repo, issue_number, body}: Readonly<ReplaceCommentOptions>) {
+export default async function replaceComment({token, owner, repo, issue_number, body}: Readonly<ReplaceCommentOptions>): Promise<void | CreateCommentResponse> {
   const {comment_id, exactMatch} = await findComment({token, owner, repo, issue_number, body});
   if (exactMatch) {
     return;
