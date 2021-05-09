@@ -32,7 +32,7 @@ const issues = (auth: string) => {
 export const findComment = async ({token, owner, repo, issue_number, body}: ExistsCommentOptions) => {
   const firstLine = body.split('\n', 1)[0];
   const {data: existingComments} = await issues(token).listComments({owner, repo, issue_number});
-  const comment = existingComments.find((comment: { readonly body: string }) => comment.body.startsWith(firstLine));
+  const comment = existingComments.find((comment) => comment.body?.startsWith(firstLine));
 
   return {
     comment_id: comment ? comment.id : undefined,
