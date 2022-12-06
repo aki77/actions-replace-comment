@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import {Octokit} from '@octokit/rest';
 import type {RestEndpointMethodTypes} from '@octokit/rest/dist-types';
 
@@ -25,9 +26,7 @@ type ExistsCommentOptions = GeneralOptions & {
   body: string;
 };
 
-const issues = (auth: string) => {
-  return new Octokit({auth}).issues;
-};
+const issues = (auth: string) => new Octokit({auth}).issues;
 
 export const findComment = async ({token, owner, repo, issue_number, body}: ExistsCommentOptions) => {
   const firstLine = body.split('\n', 1)[0];
@@ -36,7 +35,7 @@ export const findComment = async ({token, owner, repo, issue_number, body}: Exis
 
   return {
     comment_id: comment ? comment.id : undefined,
-    exactMatch: comment && comment.body === body
+    exactMatch: comment && comment.body === body,
   };
 };
 
