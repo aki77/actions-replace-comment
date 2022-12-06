@@ -1,6 +1,6 @@
 {
   "name": "@aki77/actions-replace-comment",
-  "version": "0.5.3",
+  "version": "0.5.4",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "author": "aki77",
@@ -18,14 +18,14 @@
     "space": true
   },
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^4.1.0",
-    "@typescript-eslint/parser": "^4.1.0",
-    "eslint-config-xo-typescript": "^0.41.1",
+    "@typescript-eslint/eslint-plugin": "^5.45.1",
+    "@typescript-eslint/parser": "^5.45.1",
+    "eslint-config-xo-typescript": "^0.55.1",
     "typescript": "^4.0.2",
-    "xo": "^0.40.0"
+    "xo": "^0.53.1"
   },
   "dependencies": {
-    "@octokit/rest": "^18.0.0"
+    "@octokit/rest": "^19.0.5"
   },
   "files": [
     "README.md",
