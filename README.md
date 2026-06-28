@@ -1,5 +1,15 @@
 # @aki77/actions-replace-comment
 
+## Install
+
+```bash
+npm install @aki77/actions-replace-comment
+```
+
+## How it works
+
+Identifies a comment by the first line of `body`. If a matching comment exists, it is deleted and recreated; otherwise, a new comment is created.
+
 ## Usage
 
 ```javascript
@@ -17,3 +27,13 @@ async function run(): Promise<void> {
   })
 }
 ```
+
+## Options
+
+| Field | Type | Description |
+|---|---|---|
+| `token` | `string` | GitHub token |
+| `owner` | `string` | Repository owner |
+| `repo` | `string` | Repository name |
+| `issue_number` | `number` | Issue / PR number |
+| `body` | `string` | Comment body (the first line is used as the key) |
